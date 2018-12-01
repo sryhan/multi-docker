@@ -3,13 +3,20 @@ services:
   - docker
 
 before_install:
-  - docker build -t sryhan/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t ryhshu/react-test -f ./client/Dockerfile.dev ./client
 
 scripts:
-  - docker run sryhan/docker-test npm test -- --coverage
+  - docker run ryhshu/docker-test npm test -- --coverage
 
 after_success:
-  - docker build -t sryhan/multi-client ./client
-  - docker build -t sryhan/multi-nginx ./nginx
-  - docker build -t sryhan/multi-server ./server
-  - docker build -t sryhan/multi-worker ./worker
+  - docker build -t ryhshu/multi-client ./client
+  - docker build -t ryhshu/multi-nginx ./nginx
+  - docker build -t ryhshu/multi-server ./server
+  - docker build -t ryhshu/multi-worker ./worker
+#Log into the docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+#Take those images and push them to docker hub
+  - docker push ryhshu/multi-client
+  - docker push ryhshu/multi-nginx
+  - docker push ryhshu/multi-server
+  - docker push ryhshu/multi-worker

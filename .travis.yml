@@ -1,0 +1,15 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t sryhan/react-test -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run sryhan/docker-test npm test -- --coverage
+
+after_success:
+  - docker build -t sryhan/multi-client ./client
+  - docker build -t sryhan/multi-nginx ./nginx
+  - docker build -t sryhan/multi-server ./server
+  - docker build -t sryhan/multi-worker ./worker
